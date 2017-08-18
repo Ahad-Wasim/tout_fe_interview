@@ -13,10 +13,20 @@
     "babel-loader": "^7.0.0",
     "babel-plugin-transform-runtime": "^6.23.0",
     "babel-preset-env": "^1.5.1",
+    "enzyme": "^2.9.1",
     "eslint": "^3.19.0",
     "expect.js": "^0.3.1",
     "http-server": "^0.10.0",
+    "i": "^0.3.5",
     "mocha": "^3.4.2",
-    "webpack": "^2.6.1"
+    "npm": "^5.3.0",
+    "sinon": "^3.2.1",
+    "webpack": "^2.6.1",
+    "webpack-dev-server": "^2.7.1"
+  },
+  "dependencies": {
+    "lodash": "^4.17.4",
+    "react": "^15.6.1",
+    "react-dom": "^15.6.1"
   }
 }
