@@ -8,6 +8,7 @@ const baseConfig = {
   },
   module: {
     rules: [
+
       // Compile everything with babel.
       {
         test: /\.js$/,
@@ -18,10 +19,14 @@ const baseConfig = {
       },
     ], // rules:
   }, // module:
+  devServer: {
+    contentBase: path.join(__dirname, 'public'),
+    port: 8080,
+  },
 };
 
 // Export the completed config.
 // https://webpack.js.org/configuration/configuration-types/#exporting-a-function-to-use-env
-module.exports = function() {
+module.exports = function () {
   return baseConfig;
-}
+};
