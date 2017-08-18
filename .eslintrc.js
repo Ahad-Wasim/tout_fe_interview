@@ -1,5 +1,5 @@
 module.exports = {
-  extends: 'eslint:recommended',
+  extends: 'eslint:airbnb',
   env: {
     browser: true,
     // Allows module/require syntax
