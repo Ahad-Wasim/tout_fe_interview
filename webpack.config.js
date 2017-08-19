@@ -3,22 +3,23 @@ const path = require('path');
 const baseConfig = {
   entry: './src/index.js',
   output: {
-    path: path.resolve(__dirname, 'public'),
+    path: path.join(__dirname, 'public'),
     filename: 'bundle.js',
   },
   module: {
     rules: [
-
-      // Compile everything with babel.
       {
         test: /\.js$/,
-        loader: 'babel-loader',
-        include: [
-          path.resolve(__dirname, 'src'),
-        ],
+        exclude: /node_modules/, // as per babel-loader requirements (https://github.com/babel/babel-loader#usage)
+        use: {
+          loader: 'babel-loader',
+          options: {
+            presets: ['env', 'react'],
+          },
+        },
       },
-    ], // rules:
-  }, // module:
+    ], //  closes rules
+  }, // closes module
   devServer: {
     contentBase: path.join(__dirname, 'public'),
     port: 8080,
