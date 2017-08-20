@@ -4,21 +4,28 @@ import { render } from 'react-dom';
 import { Provider } from 'react-redux';
 import { createStore } from 'redux';
 
+/* Components */
+import { Application } from './Components/ApplicationComponents/Application';
+
 /* Reducers */
 import { ApplicationState } from './Reducers/index.reducer';
 
 /* Libraries */
 import _ from 'lodash';
 
-const store = createStore(ApplicationState);
+const DEVELOPMENT_MODE = (
+  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+);
 
-// Development Purposes only
-store.subscribe(() => console.log(store.getState()));
+const store = createStore(
+  ApplicationState,
+  DEVELOPMENT_MODE
+);
 
-const Application = (
+const Layout = (
   <Provider store={store}>
-    <div>{console.log(store.getState())}</div>
+    <Application />
   </Provider>
 );
 
-render(Application, document.getElementById('app'));
+render(Layout, document.getElementById('app'));
