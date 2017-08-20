@@ -1,6 +1,7 @@
 const path = require('path');
 
 const baseConfig = {
+  devtool: 'source-map',
   entry: './src/index.js',
   output: {
     path: path.join(__dirname, 'public'),
