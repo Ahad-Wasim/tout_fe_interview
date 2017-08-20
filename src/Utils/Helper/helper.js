@@ -1,4 +1,8 @@
-function customDeepClone(state, nestedProp, data) {
+/* Default  (For component based helper functions)*/
+import React from 'react';
+import _ from 'lodash';
+
+export const customDeepClone = (state, nestedProp, data) => {
 
   let clonedState = null;
 
@@ -7,10 +11,20 @@ function customDeepClone(state, nestedProp, data) {
     if (i + 1 === coll.length) {
       return acc[prop] =  Object.assign({}, acc[prop], data);
     } else {
-      return acc[prop] = { ...acc[prop] };
+      return acc[prop] = Object.assign({}, acc[prop]);
     }
 
-  }, { ...state });
+  }, Object.assign({}, state));
 
   return clonedState;
-}
+};
+
+// customDeepClone(state, ['settings', 'default'], { totalTimers: action.payload });
+
+export const actionCreator = (type, payload) => {
+  return { type, payload };
+};
+
+export const determineDefaultOutput = (obj, prop) => {
+  return _.isNil(obj[prop]) ? obj.default[prop] : obj[prop];
+};
