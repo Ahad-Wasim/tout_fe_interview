@@ -2,7 +2,8 @@
 import React, { Component } from 'react';
 import { render } from 'react-dom';
 import { Provider } from 'react-redux';
-import { createStore } from 'redux';
+import { createStore, applyMiddleware, compose } from 'redux';
+import thunk from 'redux-thunk'
 
 /* Components */
 import { Application } from './Components/ApplicationComponents/Application';
@@ -19,7 +20,7 @@ const DEVELOPMENT_MODE = (
 
 const store = createStore(
   ApplicationState,
-  DEVELOPMENT_MODE
+  compose(applyMiddleware(thunk), DEVELOPMENT_MODE),
 );
 
 const Layout = (
