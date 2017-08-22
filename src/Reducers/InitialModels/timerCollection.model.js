@@ -1,6 +1,7 @@
 const timerCollectionModel = {
   totalTimers: [],
   modalVisibility: false,
+  runningIntervals: [],
   currentTimerConfig: {
     timerId: '',
     hours: '00',

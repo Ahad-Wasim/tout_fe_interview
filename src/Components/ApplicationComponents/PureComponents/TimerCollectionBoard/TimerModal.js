@@ -19,25 +19,28 @@ const TimerModal = (props) => {
     >
       <Header
         headerType='H2'
-        value={`Settings for Timer: ${props.timer.timerId}`}
+        value={`Settings for Timer: ${props.timer.timerId + 1}`}
       />
       <Input
+        labelValue='Hours'
         name="hours"
-        maxlength="2"
+        maxLength="2"
         value={props.timer.hours}
         onChange={props.onChange}
       />
 
       <Input
+        labelValue='Minutes'
         name="minutes"
-        maxlength="2"
+        maxLength="2"
         value={props.timer.minutes}
         onChange={props.onChange}
       />
 
       <Input
+        labelValue='Seconds'
         name="seconds"
-        maxlength="2"
+        maxLength="2"
         value={props.timer.seconds}
         onChange={props.onChange}
       />

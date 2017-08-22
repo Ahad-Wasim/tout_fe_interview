@@ -5,10 +5,16 @@ import {
   SET_MODAL_VISIBILITY,
   EDIT_TIMER_ID,
   EDIT_TIMER_CONFIGS,
+  ADD_RUNNING_INTERVAL,
+  REMOVE_RUNNING_INTERVAL
 } from '../Constants/constants.js';
 
 /* Utils */
-import { actionCreator } from '../Utils/Helper/helper';
+import {
+  actionCreator,
+  updateTimerCLONE,
+  calculateTimerProperties,
+} from '../Utils/Helper/helper';
 
 /* Libraries */
 import _ from 'lodash';
@@ -42,30 +48,93 @@ export const addTimers = (num, timerModel) => {
   return actionCreator(UPDATE_TOTAL_TIMERS, totalTimers);
 };
 
-export const startTimer = ({ timerId, hours, minutes, seconds }) => {
+export const startTimer = ({ timerId, hours, minutes, seconds }, timerList, runningIntervals) => {
   return (dispatch, getState) => {
 
-    const secondsMS = Math.floor(1000 * seconds);
-    const minutesMS = Math.floor((1000 * 60) * minutes);
-    const hoursMS = Math.floor((1000 * 60 * 60) * hours);
-    const totalMS = now + secondsMS + minutesMS + hoursMS;
+    // Immediately update timer to user inputed values
+    const timerProperties = {
+      timerId: timerId,
+      seconds: seconds,
+      minutes: minutes,
+      hours: hours,
+    };
 
-    const timerInterval = setInterval(() => {
+    // Update the store
+    const newTimerList = updateTimerCLONE(timerList, timerProperties);
+    dispatch(actionCreator(UPDATE_TOTAL_TIMERS, newTimerList));
 
-      let now = Date.now();
+    // Wait 500 ms for the TimerModal to completely close.
+    setTimeout(() => {
 
-      let difference = totalMS - now;
+      const secondsMS = Math.floor(1000 * parseInt(seconds));
+      const minutesMS = Math.floor((1000 * 60) * parseInt(minutes));
+      const hoursMS = Math.floor((1000 * 60 * 60) * parseInt(hours));
+      const totalMS = Date.now() + secondsMS + minutesMS + hoursMS;
 
-      let totalSeconds = Math.floor((difference / 1000) % 60);
-      let totalMinutes = Math.floor(((difference / (1000*60)) % 60));
-      let totalHours = Math.floor(((difference / (1000*60*60)) % 24));
+      const timerInterval = setInterval(() => {
 
+        const STATE = getState();
 
-      addTimers()
-      if(difference < 0){
-        clearInterval(timerInterval);
-      }
-    }, 1000);
+        // accessing updated State changes from other timers
+        const timerList = STATE.timerCollection.totalTimers;
+
+        const now = Date.now();
+        const difference = totalMS - now;
+
+        const timerProperties = calculateTimerProperties(difference, timerId);
+        let newTimerList = updateTimerCLONE(timerList, timerProperties);
+
+        if (difference <= 0) {
+          const resetProperty = {
+            timerId: timerId,
+            seconds: '00',
+            minutes: '00',
+            hours: '00',
+          };
+          let newTimerList = updateTimerCLONE(timerList, resetProperty);
+          dispatch(actionCreator(UPDATE_TOTAL_TIMERS, newTimerList));
+          clearInterval(timerInterval);
+        } else {
+          dispatch(actionCreator(UPDATE_TOTAL_TIMERS, newTimerList));
+        }
+      }, 250);
+
+      const intervalReference = { timerId, intervalReference: timerInterval };
+      const clonedRunningIntervals = runningIntervals.concat(intervalReference);
+      dispatch(actionCreator(ADD_RUNNING_INTERVAL, clonedRunningIntervals));
+    }, 100);
 
   };
+};
+
+export const resetModalConfigurations = () => {
+  let payload = { hours: '00', minutes: '00', seconds: '00' };
+  return actionCreator(EDIT_TIMER_CONFIGS, payload);
+};
+
+export const resetTimer = (timerId, runningIntervals) => {
+
+  return (dispatch, getState) => {
+    let foundInterval = runningIntervals.find(interval => interval.timerId === timerId);
+
+    if (foundInterval) {
+      clearInterval(foundInterval.intervalReference);
+
+      const STATE = getState();
+      const timerList = STATE.timerCollection.totalTimers;
+      const resetProperty = {
+        timerId: timerId,
+        seconds: '00',
+        minutes: '00',
+        hours: '00',
+      };
+
+      let newTimerList = updateTimerCLONE(timerList, resetProperty);
+      const updatedRunningIntervals = runningIntervals.filter(interval => interval.timerId !== timerId);
+      dispatch(actionCreator(UPDATE_TOTAL_TIMERS, newTimerList));
+      dispatch(actionCreator(REMOVE_RUNNING_INTERVAL, updatedRunningIntervals));
+    }
+  };
+
+
 };

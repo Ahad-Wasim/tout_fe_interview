@@ -30,10 +30,16 @@ class Application extends Component {
   render() {
 
     return (
-      <div className="application-wrapper">
+      <div className="application-wrapper container">
         <Header
           headerType={'H1'}
+          className={"text-center"}
           value={this.props.content.headerValue}
+        />
+        <Header
+          headerType={'H3'}
+          className={"text-center"}
+          value={'By: ' + this.props.content.author}
         />
         <Settings />
 

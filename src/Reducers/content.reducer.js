@@ -5,7 +5,7 @@ import { customDeepClone } from '../Utils/Helper/helper';
 const content = (state=contentModel, action) => {
   switch (action.type) {
     case FETCHED_CMS_DATA:
-      return Object.assign({}, state, { headerValue: action.payload });
+      return Object.assign({}, state, action.payload);
     default:
       return state;
   };

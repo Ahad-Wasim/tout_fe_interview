@@ -9,14 +9,16 @@ import { AddTimerButton } from '../../PureComponents/TimerCollectionBoard/AddTim
 import { TimerModal } from '../../PureComponents/TimerCollectionBoard/TimerModal';
 
 /* Helper */
-import { determineValue, startButtonVisibility } from '../../../../Utils/Helper/helper';
+import { determineValue, editButtonVisibility } from '../../../../Utils/Helper/helper';
 
 /* Actions */
 import {
   modalVisibility,
   editTimerId,
   editTimerConfigs,
-  startTimer
+  resetModalConfigurations,
+  startTimer,
+  resetTimer
 } from '../../../../Actions/timerCollections.actions';
 
 class TimerCollection extends Component {
@@ -35,9 +37,9 @@ class TimerCollection extends Component {
 
   handleClick(event, timerId) {
     const { name, value } = event.target;
-
-    if(name === 'Start') {
-      this.props.actions.startTimer();
+    const { runningIntervals } =  this.props.timerCollection;
+    if(name === 'Reset') {
+      this.props.actions.resetTimer(timerId, runningIntervals);
     }
 
     if (name === 'Edit') {
@@ -52,10 +54,10 @@ class TimerCollection extends Component {
   }
 
   handleSubmit(event) {
-    const { currentTimerConfig } = this.props.timerCollectionModel;
-    this.props.actions.startTimer(currentTimerConfig);
+    const { currentTimerConfig, totalTimers, runningIntervals } = this.props.timerCollection;
 
-    // this.props.actions.resetModalConfigurations();
+    this.props.actions.startTimer(currentTimerConfig, totalTimers, runningIntervals);
+    this.props.actions.resetModalConfigurations();
     this.handleCloseModal();
   }
 
@@ -66,8 +68,8 @@ class TimerCollection extends Component {
     const { seconds, minutes, hours } = this.props.settings.timerDefault;
 
     return totalTimers.map( timerModel => {
-      const { hours, minutes, seconds } = currentTimerConfig;
-      const isStartVisible = startButtonVisibility(hours, minutes, seconds);
+      const { hours, minutes, seconds } = timerModel;
+      const disabled = editButtonVisibility(hours, minutes, seconds);
 
       return (
         <Timer
@@ -77,7 +79,7 @@ class TimerCollection extends Component {
           onClick={this.onClick}
           timerId={timerModel.timerId}
           key={timerModel.timerId}
-          startButtonVisibility={isStartVisible}
+          disabled={disabled}
         />
       );
     });
@@ -126,6 +128,8 @@ const mapDispatchToProps = dispatch => {
     modalVisibility,
     editTimerId,
     editTimerConfigs,
+    resetModalConfigurations,
+    resetTimer,
     startTimer,
   };
   return {

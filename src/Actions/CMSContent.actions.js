@@ -11,8 +11,9 @@ export const fetchCMSData = () => {
   */
 
   let cmsResponse = {
-    headerValue: 'Timer Application by Ahad Wasim',
+    headerValue: 'Timer Application',
+    author: "Ahad Wasim",
   };
 
-  return actionCreator(FETCHED_CMS_DATA, cmsResponse.headerValue);
+  return actionCreator(FETCHED_CMS_DATA, cmsResponse);
 };
