@@ -3,9 +3,12 @@ import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
-/* Components */
+/* Container Components */
+import { Settings } from './Containers/Settings/Settings';
+import { TimerCollection } from './Containers/TimerCollection/TimerCollection';
+
+/* UI Components */
 import { Header } from '../UIComponents/Header';
-import { Configurations } from './Containers/Configuration';
 
 /* Actions */
 import { fetchCMSData } from '../../Actions/CMSContent.actions';
@@ -13,7 +16,6 @@ import { fetchCMSData } from '../../Actions/CMSContent.actions';
 class Application extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
   }
 
   componentDidMount() {
@@ -21,19 +23,21 @@ class Application extends Component {
     // and update it to the Application state.
     this.props.actions.fetchCMSData();
 
+    // This is can also be a good place to integrate any other external API calls. Being that that this is just a timer, not much is really needed.
+
   }
 
   render() {
 
     return (
       <div className="application-wrapper">
-
         <Header
           headerType={'H1'}
           value={this.props.content.headerValue}
         />
+        <Settings />
 
-        <Configurations />
+        <TimerCollection />
 
       </div>
     );
