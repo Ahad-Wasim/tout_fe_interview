@@ -19,12 +19,18 @@ class Application extends Component {
   }
 
   componentDidMount() {
-    // Usually we would fetch CMS content here asynchronously
-    // and update it to the Application state.
+    /*
+      This is a good place to integrate any external API calls.
+      Being that that this is just a timer applicatoin, not much
+      is really needed.
+    */
+
+    /*
+      Usually we would fetch CMS content here asynchronously
+      and update it to the Application state.
+    */
+
     this.props.actions.fetchCMSData();
-
-    // This is can also be a good place to integrate any other external API calls. Being that that this is just a timer, not much is really needed.
-
   }
 
   render() {

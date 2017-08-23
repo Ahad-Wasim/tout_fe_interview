@@ -19,13 +19,13 @@ const TimerModal = (props) => {
       style={{
         /* React Modal advises inline styles */
         overlay: {
-          backgroundColor:  'rgba(31, 29, 29, 0.75)'
-        }
+          backgroundColor:  'rgba(31, 29, 29, 0.75)',
+        },
       }}
     >
       <Header
         headerType='H2'
-        value={`Settings for Timer: ${props.timer.timerId + 1}`}
+        value={`Settings for Timer: ${props.timer.timerId}`}
         className="text-center modal-header"
       />
 

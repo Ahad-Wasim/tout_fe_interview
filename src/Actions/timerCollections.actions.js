@@ -32,9 +32,11 @@ export const editTimerConfigs = (formField, value) => {
   return actionCreator(EDIT_TIMER_CONFIGS, payload);
 };
 
+
+// creates n timerModels in the redux store
 export const addTimers = (num, timerModel) => {
   const totalTimers = _.range(num).map((val, i) => {
-    return Object.assign({}, timerModel, { timerId: i });
+    return Object.assign({}, timerModel, { timerId: i+1 });
   });
 
   return actionCreator(UPDATE_TOTAL_TIMERS, totalTimers);
