@@ -1,7 +1,4 @@
-# Ahad Wasim - (Installing the Application)
-
-
-### August 22nd, 2017
+# Ahad Wasim - (Installing the Application) August 22nd, 2017
 
 ---
 
@@ -46,7 +43,7 @@ The startTimer function takes in one argument which is the configuration **objec
 ```javascript
 const configurations = {
   timerId: 1,     // number primitive
-	hours: '12',    // string primitive
+  hours: '12',    // string primitive
   minutes: '22',  // string primitive
   seconds: '05'   // string primitive
 }
