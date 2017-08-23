@@ -100,3 +100,7 @@ export const validateBeforeStartingTimer = ({ hours, minutes, seconds }) => {
 
   return notAllZeros && notAllEmptyValues;
 };
+
+export const isTimerRunning = (timerId, runningIntervals) => {
+  return runningIntervals.find(interval => interval.timerId === timerId);
+}

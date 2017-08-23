@@ -13,6 +13,7 @@ import {
   actionCreator,
   updateTimerCLONE,
   calculateTimerProperties,
+  isTimerRunning
 } from '../Utils/Helper/helper';
 
 /* Libraries */
@@ -48,63 +49,72 @@ export const startTimer = ({ timerId, hours, minutes, seconds }) => {
     // Current Values from ApplicationState
     const { totalTimers, runningIntervals } = getState().timerCollection;
 
-    // Immediately update timer to user inputed values
-    const timerProperties = {
-      timerId: timerId,
-      seconds: seconds,
-      minutes: minutes,
-      hours: hours,
-    };
+    // Check to see if timer was not running previously
+    if (!isTimerRunning(timerId, runningIntervals)) {
 
-    // Clone and update the totalTimers array with new values
-    const newTimerList = updateTimerCLONE(totalTimers, timerProperties);
-    dispatch(actionCreator(UPDATE_TOTAL_TIMERS, newTimerList));
+      // Immediately update timer to user inputed values
+      const timerProperties = {
+        timerId: timerId,
+        seconds: seconds,
+        minutes: minutes,
+        hours: hours,
+      };
 
-    // Wait 500 ms for the TimerModal to completely close.
-    setTimeout(() => {
+      // Clone and update the totalTimers list with the new inputed values
+      const newTimerList = updateTimerCLONE(totalTimers, timerProperties);
+      dispatch(actionCreator(UPDATE_TOTAL_TIMERS, newTimerList));
 
-      const secondsMS = Math.floor(1000 * parseInt(seconds));
-      const minutesMS = Math.floor((1000 * 60) * parseInt(minutes));
-      const hoursMS = Math.floor((1000 * 60 * 60) * parseInt(hours));
-      const totalMS = Date.now() + secondsMS + minutesMS + hoursMS;
+      // Wait 500 ms so that the TimerModal can completely close.
+      setTimeout(() => {
 
-      const timerInterval = setInterval(() => {
+        // Calculate total number of milleconds with the new inputted values
+        const secondsMS = Math.floor(1000 * parseInt(seconds));
+        const minutesMS = Math.floor((1000 * 60) * parseInt(minutes));
+        const hoursMS = Math.floor((1000 * 60 * 60) * parseInt(hours));
+        const totalMS = Date.now() + secondsMS + minutesMS + hoursMS;
 
-        // accessing updated State changes from other timers
-        const { totalTimers } = getState().timerCollection;
+        // Start an interval to keep decreasing the timer
+        const timerInterval = setInterval(() => {
 
-        const now = Date.now();
-        const difference = totalMS - now;
+          // referencing the latest Application state changes
+          const { totalTimers } = getState().timerCollection;
 
-        // timer properties that encapsulates the total remaining time
-        const timerProperties = calculateTimerProperties(difference, timerId);
-        let newTimerList = updateTimerCLONE(totalTimers, timerProperties);
+          const now = Date.now();
+          const difference = totalMS - now;
 
-        // If the timer is finished
-        if (difference <= 0) {
-          const resetProperty = {
-            timerId: timerId,
-            seconds: '00',
-            minutes: '00',
-            hours: '00',
-          };
+          // calculates hours + minutes + seconds before hitting target time
+          const timerProperties = calculateTimerProperties(difference, timerId);
+          let newTimerList = updateTimerCLONE(totalTimers, timerProperties);
 
-          // reset totaltimers with default values
-          let newTimerList = updateTimerCLONE(totalTimers, resetProperty);
-          dispatch(actionCreator(UPDATE_TOTAL_TIMERS, newTimerList));
-          clearInterval(timerInterval);
-        } else {
-          dispatch(actionCreator(UPDATE_TOTAL_TIMERS, newTimerList));
-        }
-      }, 250);
+          // If the timer has surpassed the target
+          if (difference <= 0) {
+            const resetProperty = {
+              timerId: timerId,
+              seconds: '00',
+              minutes: '00',
+              hours: '00',
+            };
 
-      const intervalReference = { timerId, intervalReference: timerInterval };
-      const clonedRunningIntervals = runningIntervals.concat(intervalReference);
-      dispatch(actionCreator(ADD_RUNNING_INTERVAL, clonedRunningIntervals));
-    }, 100);
+            // reset totaltimers with default values
+            let newTimerList = updateTimerCLONE(totalTimers, resetProperty);
+            dispatch(actionCreator(UPDATE_TOTAL_TIMERS, newTimerList));
 
-  };
-};
+            // stop the interval
+            clearInterval(timerInterval);
+          } else {
+
+            // else dispatch the updated Time left
+            dispatch(actionCreator(UPDATE_TOTAL_TIMERS, newTimerList));
+          }
+        }, 250);
+
+        const intervalReference = { timerId, intervalReference: timerInterval };
+        const clonedRunningIntervals = runningIntervals.concat(intervalReference);
+        dispatch(actionCreator(ADD_RUNNING_INTERVAL, clonedRunningIntervals));
+      }, 100);
+    } //Closes runningTimerConditional
+  };  // Closes Thunk Function
+}; // Closes startTimer
 
 export const resetModalConfigurations = () => {
   let payload = { hours: '00', minutes: '00', seconds: '00' };
