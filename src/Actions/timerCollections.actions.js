@@ -1,7 +1,6 @@
 /* Constants */
 import {
   UPDATE_TOTAL_TIMERS,
-  SET_TIMER_COUNT,
   SET_MODAL_VISIBILITY,
   EDIT_TIMER_ID,
   EDIT_TIMER_CONFIGS,
@@ -18,10 +17,6 @@ import {
 
 /* Libraries */
 import _ from 'lodash';
-
-export const updateTimerCount = (value) => {
-  return actionCreator(SET_TIMER_COUNT, value);
-};
 
 export const createNewTimer = (defaults, runningTimers) => {
 }
