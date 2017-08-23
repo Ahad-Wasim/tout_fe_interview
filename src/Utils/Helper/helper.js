@@ -45,6 +45,22 @@ export const editButtonVisibility = (hours, minutes, seconds) => {
   return true;
 };
 
+export const allEmptyValues = (hours, minutes, seconds) => {
+  const finished = '';
+
+  // Used nested if statments because it is easier to read versus putting
+  // all these conditionals in one line
+  if (_.isEqual(hours, finished)) {
+    if (_.isEqual(minutes, finished)) {
+      if (_.isEqual(seconds, finished)) {
+        return false;
+      }
+    }
+  }
+
+  return true;
+}
+
 export const calculateTimerProperties = (difference, timerId) => {
   return {
     timerId: timerId,
@@ -66,4 +82,21 @@ export const updateTimerCLONE  = (timerList, currentTimer) => {
   return _.map(timerList, (timer) => {
     return timer.timerId === currentTimer.timerId ? currentTimer : timer;
   });
+};
+
+export const validateTimerValues = (value) => {
+  // Has to be numeric values with no decimals
+  var num = +value;
+  if (!isNaN(num) && +num % 1 === 0) {
+    return true;
+  }
+
+  return false;
+};
+
+export const validateBeforeStartingTimer = ({ hours, minutes, seconds }) => {
+  const notAllZeros = editButtonVisibility(hours, minutes, seconds);
+  const notAllEmptyValues = allEmptyValues(hours, minutes, seconds);
+
+  return notAllZeros && notAllEmptyValues;
 };
