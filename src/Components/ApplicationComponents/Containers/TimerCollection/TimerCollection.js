@@ -63,7 +63,7 @@ class TimerCollection extends Component {
   handleSubmit(event) {
     const { currentTimerConfig } = this.props.timerCollection;
     const errorFree = validateBeforeStartingTimer(currentTimerConfig);
-    if(errorFree){
+    if (errorFree) {
       this.props.actions.startTimer(currentTimerConfig);
       this.props.actions.resetModalConfigurations();
       this.handleCloseModal();

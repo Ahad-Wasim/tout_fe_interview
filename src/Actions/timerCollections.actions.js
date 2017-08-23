@@ -18,9 +18,6 @@ import {
 /* Libraries */
 import _ from 'lodash';
 
-export const createNewTimer = (defaults, runningTimers) => {
-}
-
 export const modalVisibility = (bool) => {
   return actionCreator(SET_MODAL_VISIBILITY, bool);
 };
