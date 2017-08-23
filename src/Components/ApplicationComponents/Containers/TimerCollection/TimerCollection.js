@@ -32,6 +32,8 @@ class TimerCollection extends Component {
     this.onClick = this.handleClick.bind(this);
     this.onSubmit = this.handleSubmit.bind(this);
     this.onCloseModal = this.handleCloseModal.bind(this);
+    window.startTimer = this.props.actions.startTimer.bind(this);
+    window.resetTimer = this.props.actions.resetTimer.bind(this);
   };
 
   handleChange(event) {
@@ -44,9 +46,8 @@ class TimerCollection extends Component {
 
   handleClick(event, timerId) {
     const { name, value } = event.target;
-    const { runningIntervals } =  this.props.timerCollection;
     if(name === 'Reset') {
-      this.props.actions.resetTimer(timerId, runningIntervals);
+      this.props.actions.resetTimer(timerId);
     }
 
     if (name === 'Edit') {
@@ -60,10 +61,10 @@ class TimerCollection extends Component {
   }
 
   handleSubmit(event) {
-    const { currentTimerConfig, totalTimers, runningIntervals } = this.props.timerCollection;
+    const { currentTimerConfig } = this.props.timerCollection;
     const errorFree = validateBeforeStartingTimer(currentTimerConfig);
     if(errorFree){
-      this.props.actions.startTimer(currentTimerConfig, totalTimers, runningIntervals);
+      this.props.actions.startTimer(currentTimerConfig);
       this.props.actions.resetModalConfigurations();
       this.handleCloseModal();
     }
