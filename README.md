@@ -56,7 +56,7 @@ ___
 
 ### Resetting the Timer
 
-There are two way to reset the timer. You can physically click on the **reset button** in the UI (when the timer is running) or you can utilize the **resetTimer** function found on the window object.
+There are two ways to reset the timer. You can physically click on the **reset button** in the UI (when the timer is running) or you can utilize the **resetTimer** function found on the window object.
 
 The resetTimer function takes in one argument which is the timerId.
 
