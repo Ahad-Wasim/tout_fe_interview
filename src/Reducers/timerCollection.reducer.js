@@ -3,8 +3,6 @@ import {
   EDIT_TIMER_ID,
   EDIT_TIMER_CONFIGS,
   UPDATE_TOTAL_TIMERS,
-  ADD_TIMER,
-  REMOVE_TIMER,
   SET_MODAL_VISIBILITY,
   ADD_RUNNING_INTERVAL,
   REMOVE_RUNNING_INTERVAL
@@ -29,10 +27,6 @@ const timerCollection = (state=timerCollectionModel, { type, payload }) => {
       return customDeepClone(state, ['currentTimerConfig'], { timerId: payload });
     case EDIT_TIMER_CONFIGS:
       return customDeepClone(state, ['currentTimerConfig'], payload);
-    case ADD_TIMER:
-      return Object.assign({}, state, { timerCount: payload });
-    case REMOVE_TIMER:
-      return Object.assign({}, state, { timerCount: payload });
     case SET_MODAL_VISIBILITY:
       return Object.assign({}, state, { modalVisibility: payload });
     default:
