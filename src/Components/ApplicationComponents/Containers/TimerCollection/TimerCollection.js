@@ -5,11 +5,15 @@ import { connect } from 'react-redux';
 
 /* Pure Components */
 import { Timer } from '../../PureComponents/TimerCollectionBoard/Timer';
-import { AddTimerButton } from '../../PureComponents/TimerCollectionBoard/AddTimerButton';
 import { TimerModal } from '../../PureComponents/TimerCollectionBoard/TimerModal';
 
 /* Helper */
-import { determineValue, editButtonVisibility } from '../../../../Utils/Helper/helper';
+import {
+  determineValue,
+  editButtonVisibility,
+  validateTimerValues,
+  validateBeforeStartingTimer
+} from '../../../../Utils/Helper/helper';
 
 /* Actions */
 import {
@@ -32,7 +36,10 @@ class TimerCollection extends Component {
 
   handleChange(event) {
     const { name, value } = event.target;
-    this.props.actions.editTimerConfigs(name, value);
+    if (name === 'hours' || name === 'minutes' || name === 'seconds') {
+      const errorFree = validateTimerValues(value);
+      errorFree ? this.props.actions.editTimerConfigs(name, value) : null;
+    }
   }
 
   handleClick(event, timerId) {
@@ -46,7 +53,6 @@ class TimerCollection extends Component {
       this.props.actions.editTimerId(timerId);
       this.props.actions.modalVisibility(true);
     }
-
   }
 
   handleCloseModal(event) {
@@ -55,10 +61,12 @@ class TimerCollection extends Component {
 
   handleSubmit(event) {
     const { currentTimerConfig, totalTimers, runningIntervals } = this.props.timerCollection;
-
-    this.props.actions.startTimer(currentTimerConfig, totalTimers, runningIntervals);
-    this.props.actions.resetModalConfigurations();
-    this.handleCloseModal();
+    const errorFree = validateBeforeStartingTimer(currentTimerConfig);
+    if(errorFree){
+      this.props.actions.startTimer(currentTimerConfig, totalTimers, runningIntervals);
+      this.props.actions.resetModalConfigurations();
+      this.handleCloseModal();
+    }
   }
 
   // avoid writing logic inside the render statement. Attach to method instead!
@@ -92,11 +100,6 @@ class TimerCollection extends Component {
       <div className="timerCollection-wrapper">
 
         { this.renderTotalTimers() }
-
-        <AddTimerButton
-          onClick={this.onClick}
-          value={'+'}
-        />
 
         <TimerModal
           isOpen={this.props.timerCollection.modalVisibility}
