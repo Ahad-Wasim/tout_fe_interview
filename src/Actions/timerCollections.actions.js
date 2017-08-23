@@ -48,8 +48,11 @@ export const addTimers = (num, timerModel) => {
   return actionCreator(UPDATE_TOTAL_TIMERS, totalTimers);
 };
 
-export const startTimer = ({ timerId, hours, minutes, seconds }, timerList, runningIntervals) => {
+export const startTimer = ({ timerId, hours, minutes, seconds }) => {
   return (dispatch, getState) => {
+
+    // Current Values from ApplicationState
+    const { totalTimers, runningIntervals } = getState().timerCollection;
 
     // Immediately update timer to user inputed values
     const timerProperties = {
@@ -59,8 +62,8 @@ export const startTimer = ({ timerId, hours, minutes, seconds }, timerList, runn
       hours: hours,
     };
 
-    // Update the store
-    const newTimerList = updateTimerCLONE(timerList, timerProperties);
+    // Clone and update the totalTimers array with new values
+    const newTimerList = updateTimerCLONE(totalTimers, timerProperties);
     dispatch(actionCreator(UPDATE_TOTAL_TIMERS, newTimerList));
 
     // Wait 500 ms for the TimerModal to completely close.
@@ -73,17 +76,17 @@ export const startTimer = ({ timerId, hours, minutes, seconds }, timerList, runn
 
       const timerInterval = setInterval(() => {
 
-        const STATE = getState();
-
         // accessing updated State changes from other timers
-        const timerList = STATE.timerCollection.totalTimers;
+        const { totalTimers } = getState().timerCollection;
 
         const now = Date.now();
         const difference = totalMS - now;
 
+        // timer properties that encapsulates the total remaining time
         const timerProperties = calculateTimerProperties(difference, timerId);
-        let newTimerList = updateTimerCLONE(timerList, timerProperties);
+        let newTimerList = updateTimerCLONE(totalTimers, timerProperties);
 
+        // If the timer is finished
         if (difference <= 0) {
           const resetProperty = {
             timerId: timerId,
@@ -91,7 +94,9 @@ export const startTimer = ({ timerId, hours, minutes, seconds }, timerList, runn
             minutes: '00',
             hours: '00',
           };
-          let newTimerList = updateTimerCLONE(timerList, resetProperty);
+
+          // reset totaltimers with default values
+          let newTimerList = updateTimerCLONE(totalTimers, resetProperty);
           dispatch(actionCreator(UPDATE_TOTAL_TIMERS, newTimerList));
           clearInterval(timerInterval);
         } else {
@@ -112,29 +117,27 @@ export const resetModalConfigurations = () => {
   return actionCreator(EDIT_TIMER_CONFIGS, payload);
 };
 
-export const resetTimer = (timerId, runningIntervals) => {
+export const resetTimer = (timerId) => {
 
   return (dispatch, getState) => {
+
+    const { runningIntervals, totalTimers } = getState().timerCollection;
     let foundInterval = runningIntervals.find(interval => interval.timerId === timerId);
 
     if (foundInterval) {
       clearInterval(foundInterval.intervalReference);
 
-      const STATE = getState();
-      const timerList = STATE.timerCollection.totalTimers;
-      const resetProperty = {
+      const resetProperties = {
         timerId: timerId,
         seconds: '00',
         minutes: '00',
         hours: '00',
       };
 
-      let newTimerList = updateTimerCLONE(timerList, resetProperty);
+      let newTimerList = updateTimerCLONE(totalTimers, resetProperties);
       const updatedRunningIntervals = runningIntervals.filter(interval => interval.timerId !== timerId);
       dispatch(actionCreator(UPDATE_TOTAL_TIMERS, newTimerList));
       dispatch(actionCreator(REMOVE_RUNNING_INTERVAL, updatedRunningIntervals));
     }
   };
-
-
 };
