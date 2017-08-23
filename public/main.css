@@ -1,0 +1,64 @@
+html, body {
+  background-color: #222;
+}
+
+.application-wrapper h1,
+.application-wrapper h3 {
+  color:white;
+}
+
+.timer {
+  width: 35%;
+  margin: 50px auto;
+}
+
+.timer-button {
+  width:50%;
+}
+
+.timer p {
+  color: white;
+  font-size: 4em;
+  border: 1px solid white;
+  border-radius: 8px
+}
+
+.modal-header {
+  margin-bottom: 30px;
+}
+
+.modal-field {
+  margin-bottom: 45px;
+}
+
+.modal-field label {
+  font-size: 1.5em;
+  display: block;
+  text-align: center;
+}
+
+.modal-field input {
+  margin: 0 auto;
+  width: 100px;
+  text-align: center;
+}
+
+.modal-buttonWrapper {
+  margin-top: 60px;
+}
+
+.modal-buttonContainer {
+  width: 200px;
+  margin: 0 auto;
+}
+.modal-buttonContainer button {
+  width: 96px;
+}
+
+.submit-button {
+  margin-right: 4px;
+}
+
+.close-button {
+  margin-left: 4px;
+}
