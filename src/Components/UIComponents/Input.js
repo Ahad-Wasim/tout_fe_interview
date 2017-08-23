@@ -2,8 +2,8 @@ import React from 'react';
 
 const Input = (props) => {
   return (
-    <div>
-    <label>{props.labelValue}:</label>
+    <div className={props.wrapperClassName}>
+    <label>{props.labelValue}</label>
       <input
         onChange={props.onChange}
         onClick={props.onClick}
