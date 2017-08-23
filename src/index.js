@@ -14,14 +14,11 @@ import { ApplicationState } from './Reducers/index.reducer';
 /* Libraries */
 import _ from 'lodash';
 
-const DEVELOPMENT_MODE = (
-  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
-);
+// const DEVELOPMENT_MODE = (
+//   window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+// );
 
-const store = createStore(
-  ApplicationState,
-  compose(applyMiddleware(thunk), DEVELOPMENT_MODE),
-);
+const store = createStore(ApplicationState, applyMiddleware(thunk));
 
 const Layout = (
   <Provider store={store}>
