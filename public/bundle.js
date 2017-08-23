@@ -24745,6 +24745,7 @@ var addTimers = exports.addTimers = function addTimers(num, timerModel) {
   return (0, _helper.actionCreator)(_constants.UPDATE_TOTAL_TIMERS, totalTimers);
 };
 
+// Start a specific timer
 var startTimer = exports.startTimer = function startTimer(_ref) {
   var timerId = _ref.timerId,
       hours = _ref.hours,
@@ -24827,11 +24828,14 @@ var startTimer = exports.startTimer = function startTimer(_ref) {
   }; // Closes Thunk Function
 }; // Closes startTimer
 
+
+// Reset the Modal Configurations
 var resetModalConfigurations = exports.resetModalConfigurations = function resetModalConfigurations() {
   var payload = { hours: '00', minutes: '00', seconds: '00' };
   return (0, _helper.actionCreator)(_constants.EDIT_TIMER_CONFIGS, payload);
 };
 
+// Reset a specific timer
 var resetTimer = exports.resetTimer = function resetTimer(timerId) {
 
   return function (dispatch, getState) {

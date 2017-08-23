@@ -43,6 +43,7 @@ export const addTimers = (num, timerModel) => {
   return actionCreator(UPDATE_TOTAL_TIMERS, totalTimers);
 };
 
+// Start a specific timer
 export const startTimer = ({ timerId, hours, minutes, seconds }) => {
   return (dispatch, getState) => {
 
@@ -113,14 +114,17 @@ export const startTimer = ({ timerId, hours, minutes, seconds }) => {
         dispatch(actionCreator(ADD_RUNNING_INTERVAL, clonedRunningIntervals));
       }, 100);
     } //Closes runningTimerConditional
-  };  // Closes Thunk Function
+  }; // Closes Thunk Function
 }; // Closes startTimer
 
+
+// Reset the Modal Configurations
 export const resetModalConfigurations = () => {
   let payload = { hours: '00', minutes: '00', seconds: '00' };
   return actionCreator(EDIT_TIMER_CONFIGS, payload);
 };
 
+// Reset a specific timer
 export const resetTimer = (timerId) => {
 
   return (dispatch, getState) => {
